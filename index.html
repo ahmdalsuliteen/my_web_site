@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بورتفوليو | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Tajawal:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   COLOR SYSTEM
+   bg         : #0d0d0d  (أسود عميق)
+   surface    : #141414  (أسود ناعم)
+   surface2   : #1c1c1c  (أسود فاتح)
+   red        : #c0392b  (أحمر)
+   red2       : #e74c3c  (أحمر فاتح hover)
+   beige      : #e8dcc8  (بيج)
+   beige2     : #f5efe0  (بيج فاتح)
+   muted      : #7a7060  (بيج معتم)
+══════════════════════════════════════ */
+:root{
+  --bg:#0d0d0d;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --red:#c0392b;
+  --red2:#e74c3c;
+  --beige:#e8dcc8;
+  --beige2:#f5efe0;
+  --muted:#7a7060;
+  --border:rgba(232,220,200,.14);
+  --border-red:rgba(192,57,43,.25);
+  --font-ar:'Tajawal',sans-serif;
+  --font-en:'Playfair Display',serif;
+  --font-mono:'Space Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--beige);font-family:var(--font-ar);overflow-x:hidden;cursor:none}
+
+/* ── Custom Cursor ── */
+#cur{
+  width:10px;height:10px;
+  background:var(--red);
+  border-radius:50%;
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .3s;
+}
+#cur-ring{
+  width:36px;height:36px;
+  border:1.5px solid rgba(192,57,43,.6);
+  border-radius:50%;
+  position:fixed;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s;
+}
+.cur-big #cur{width:22px;height:22px}
+.cur-big #cur-ring{width:60px;height:60px}
+
+/* ── Noise ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;
+  opacity:.18;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+
+/* ── Loader ── */
+#loader{
+  position:fixed;inset:0;z-index:10000;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  transition:opacity .9s,visibility .9s;
+}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.ld-logo{font-family:var(--font-en);font-size:32px;font-style:italic;color:var(--beige);letter-spacing:2px}
+.ld-logo span{color:var(--red)}
+.ld-bar{width:220px;height:1px;background:var(--surface2);overflow:hidden}
+.ld-fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--beige));animation:lfill 1.5s ease-out forwards}
+@keyframes lfill{to{width:100%}}
+.ld-txt{font-family:var(--font-mono);font-size:9px;letter-spacing:5px;color:var(--muted);text-transform:uppercase}
+
+/* ── Nav ── */
+nav{
+  position:fixed;inset:0 0 auto;z-index:900;
+  padding:22px 64px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(to bottom,rgba(13,13,13,.97),transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(232,220,200,.04);
+}
+.nav-logo{
+  font-family:var(--font-en);font-size:20px;font-style:italic;
+  color:var(--beige);letter-spacing:1px;
+}
+.nav-logo span{color:var(--red)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:2.5px;
+  color:var(--muted);text-decoration:none;text-transform:uppercase;
+  transition:color .3s;cursor:none;position:relative;padding-bottom:5px;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;right:0;width:0;height:1px;
+  background:var(--red);transition:width .35s;
+}
+.nav-links a:hover{color:var(--beige)}
+.nav-links a:hover::after{width:100%;right:auto;left:0}
+
+/* ── Fixed UI buttons ── */
+#lang-btn{
+  position:fixed;top:20px;left:20px;z-index:1000;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);font-family:var(--font-mono);font-size:9px;
+  padding:7px 14px;cursor:none;letter-spacing:2px;transition:all .3s;
+}
+#lang-btn:hover{background:var(--red);color:var(--beige2);border-color:var(--red)}
+
+#admin-btn{
+  position:fixed;bottom:28px;left:28px;z-index:1000;
+  width:42px;height:42px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:none;opacity:.3;transition:all .3s;
+}
+#admin-btn:hover{opacity:1;border-color:var(--red);background:var(--surface)}
+#admin-btn svg{width:16px;fill:var(--beige)}
+
+/* ═══════════════════════
+   HERO
+═══════════════════════ */
+#hero{
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  padding:120px 64px 80px;text-align:center;
+}
+
+/* Hero background: diagonal split feel */
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 35%,rgba(192,57,43,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%,rgba(232,220,200,.03) 0%,transparent 60%);
+}
+
+/* Animated grid lines */
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  background-image:
+    linear-gradient(rgba(232,220,200,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(232,220,200,.03) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 80%);
+  animation:gridshift 20s linear infinite;
+}
+@keyframes gridshift{from{transform:translate(0,0)}to{transform:translate(80px,80px)}}
+
+.hero-tag{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:6px;
+  color:var(--red);text-transform:uppercase;
+  margin-bottom:20px;opacity:0;animation:fu 1s 1.1s forwards;
+}
+.hero-name{
+  font-family:var(--font-en);
+  font-size:clamp(54px,9.5vw,112px);
+  font-weight:900;font-style:italic;
+  line-height:.86;
+  color:var(--beige);
+  opacity:0;animation:fu 1s 1.3s forwards;
+}
+.hero-name span{
+  color:transparent;
+  -webkit-text-stroke:2px var(--red);
+}
+.hero-degree{
+  font-size:clamp(13px,1.7vw,17px);font-weight:300;
+  color:var(--muted);margin-top:22px;letter-spacing:1px;
+  opacity:0;animation:fu 1s 1.5s forwards;
+}
+.hero-chips{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  margin-top:26px;opacity:0;animation:fu 1s 1.7s forwards;
+}
+.hero-chip{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+  border:1px solid var(--border-red);padding:5px 14px;
+  color:var(--beige);text-transform:uppercase;
+}
+.hero-stats{
+  display:flex;gap:56px;margin-top:54px;
+  opacity:0;animation:fu 1s 1.9s forwards;
+}
+.stt{text-align:center}
+.stn{
+  font-family:var(--font-en);font-size:40px;font-weight:900;
+  color:var(--red);line-height:1;
+}
+.stl{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+  color:var(--muted);margin-top:5px;text-transform:uppercase;
+}
+.hero-scroll{
+  position:absolute;bottom:34px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:3px;
+  color:var(--muted);opacity:0;animation:fu 1s 2.1s forwards;cursor:none;
+}
+.scroll-line{
+  width:1px;height:46px;
+  background:linear-gradient(to bottom,var(--red),transparent);
+  animation:spulse 2s ease-in-out infinite;
+}
+@keyframes spulse{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.5)}}
+@keyframes fu{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+/* ═══════════════════════
+   SECTION BASE
+═══════════════════════ */
+section{padding:110px 64px}
+.stag{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:5px;
+  color:var(--red);text-transform:uppercase;
+  display:flex;align-items:center;gap:14px;margin-bottom:14px;
+}
+.stag::before{content:'';width:28px;height:1px;background:var(--red);flex-shrink:0}
+.stitle{
+  font-family:var(--font-ar);font-size:clamp(28px,4vw,50px);
+  font-weight:700;color:var(--beige2);line-height:1.1;
+}
+.sdesc{font-size:15px;color:var(--muted);line-height:1.95;margin-top:14px;max-width:520px}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s,transform .8s}
+.reveal.vis{opacity:1;transform:none}
+
+/* ═══════════════════════
+   01 — PHOTOGRAPHY
+   bg: black (var(--bg))
+═══════════════════════ */
+#photography{background:var(--bg)}
+
+.folders-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:2px;  /* tight gap = mosaic feel */
+  margin-top:44px;
+}
+.folder-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;cursor:none;
+  transition:border-color .4s;
+  position:relative;
+}
+.folder-card:hover{border-color:var(--red)}
+
+.folder-thumb{
+  height:220px;overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.folder-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .7s;display:block}
+.folder-card:hover .folder-thumb img{transform:scale(1.1)}
+.folder-ph{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--surface2),#111);font-size:54px;
+}
+/* Red overlay on hover */
+.folder-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(192,57,43,.85) 0%,rgba(13,13,13,.3) 60%,transparent 100%);
+  opacity:0;transition:opacity .4s;
+  display:flex;align-items:flex-end;padding:20px;
+}
+.folder-card:hover .folder-overlay{opacity:1}
+.folder-open-lbl{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:3px;
+  color:var(--beige2);text-transform:uppercase;
+}
+.folder-meta{
+  padding:18px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--border);
+}
+.folder-name{font-size:15px;font-weight:700;color:var(--beige)}
+.folder-count{font-family:var(--font-mono);font-size:10px;color:var(--red)}
+
+/* ═══════════════════════
+   02 — GRADUATE
+   bg: surface (très léger)
+═══════════════════════ */
+#graduate{background:var(--surface)}
+
+.grad-layout{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:44px;align-items:start;margin-top:44px;
+}
+/* Identity card */
+.grad-id{
+  background:var(--bg);
+  border:1px solid var(--border);
+  padding:32px;position:relative;overflow:hidden;
+}
+.grad-id::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--red),transparent);
+}
+.grad-av-ph{
+  width:86px;height:86px;border-radius:50%;
+  border:2px solid var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;background:var(--surface2);margin-bottom:18px;
+}
+.grad-av{
+  width:86px;height:86px;border-radius:50%;
+  border:2px solid var(--red);
+  object-fit:cover;display:block;margin-bottom:18px;
+}
+.grad-n{font-family:var(--font-en);font-size:20px;font-style:italic;color:var(--beige2)}
+.grad-t{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-top:4px}
+.grad-sep{width:100%;height:1px;background:var(--border);margin:18px 0}
+.grad-rows{display:flex;flex-direction:column;gap:12px}
+.grad-row{display:flex;gap:12px;align-items:flex-start}
+.grad-ico{font-size:14px;margin-top:2px;flex-shrink:0}
+.grad-info{font-size:13px;color:var(--muted);line-height:1.5}
+.grad-info strong{color:var(--beige);display:block;font-size:13px;font-weight:700}
+
+/* Projects list */
+.proj-list{display:flex;flex-direction:column;gap:14px}
+.proj-card{
+  background:var(--bg);border:1px solid var(--border);
+  padding:22px 26px;cursor:none;
+  position:relative;overflow:hidden;transition:border-color .3s;
+}
+.proj-card:hover{border-color:var(--red)}
+/* left accent line */
+.proj-card::before{
+  content:'';position:absolute;left:0;top:0;
+  width:3px;height:100%;
+  background:var(--red);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform .35s ease;
+}
+.proj-card:hover::before{transform:scaleY(1)}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:9px}
+.proj-name{font-size:16px;font-weight:700;color:var(--beige2)}
+.proj-badge{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:1px;
+  color:var(--red);border:1px solid var(--border-red);
+  padding:3px 10px;white-space:nowrap;flex-shrink:0;
+}
+.proj-desc{font-size:13px;color:var(--muted);line-height:1.8}
+.proj-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px}
+.proj-tag{
+  font-family:var(--font-mono);font-size:8px;
+  color:var(--muted);border:1px solid rgba(232,220,200,.08);
+  padding:3px 8px;
+}
+.proj-imgs{display:flex;gap:6px;margin-top:12px}
+.proj-img{
+  width:58px;height:44px;object-fit:cover;
+  border:1px solid var(--border);cursor:none;transition:border-color .3s;
+}
+.proj-img:hover{border-color:var(--red)}
+
+/* ═══════════════════════
+   03 — CERTIFICATES
+   bg: black
+═══════════════════════ */
+#certificates{background:var(--bg)}
+
+.cert-filter{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 34px}
+.cfbtn{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);font-family:var(--font-mono);font-size:9px;
+  letter-spacing:2px;padding:6px 16px;cursor:none;
+  transition:all .3s;text-transform:uppercase;
+}
+.cfbtn.active,.cfbtn:hover{background:var(--red);color:var(--beige2);border-color:var(--red)}
+
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px}
+.cert-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:28px;position:relative;overflow:hidden;
+  transition:border-color .4s,transform .4s;cursor:none;
+}
+.cert-card:hover{border-color:var(--red);transform:translateY(-4px)}
+/* top red stripe */
+.cert-card::after{
+  content:'';position:absolute;top:0;right:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.cert-card:hover::after{opacity:1}
+/* corner glow */
+.cert-gl{
+  position:absolute;top:0;right:0;width:90px;height:90px;
+  background:radial-gradient(circle at top right,rgba(192,57,43,.1),transparent);
+  pointer-events:none;
+}
+.cert-cat-tag{
+  position:absolute;top:14px;left:14px;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:1px;
+  color:var(--muted);border:1px solid var(--border);padding:2px 8px;
+}
+.cert-emoji{font-size:34px;margin-bottom:14px;display:block}
+.cert-name{font-size:15px;font-weight:700;color:var(--beige2);margin-bottom:5px}
+.cert-issuer{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--red)}
+.cert-date{font-size:12px;color:var(--muted);margin-top:5px}
+.cert-img{
+  margin-top:14px;width:100%;aspect-ratio:16/9;
+  object-fit:cover;border:1px solid var(--border);
+  cursor:none;display:block;transition:border-color .3s;
+}
+.cert-img:hover{border-color:var(--red)}
+
+/* ═══════════════════════
+   ABOUT
+   bg: surface
+═══════════════════════ */
+#about-sec{background:var(--surface);padding:110px 64px}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-pw{position:relative}
+.about-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--border);display:block}
+.about-ph{
+  width:100%;aspect-ratio:3/4;background:var(--surface2);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;color:var(--red);
+}
+/* decorative frame */
+.about-frame{
+  position:absolute;top:20px;left:-20px;right:20px;bottom:-20px;
+  border:1px solid var(--border-red);z-index:-1;
+}
+.about-bio{font-size:15px;color:var(--muted);line-height:2;margin-top:18px}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.skill-chip{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:1px;
+  border:1px solid var(--border-red);padding:5px 12px;
+  color:var(--beige);transition:all .3s;cursor:none;
+}
+.skill-chip:hover{background:var(--red);color:var(--beige2);border-color:var(--red)}
+
+/* ═══════════════════════
+   FOLDER VIEWER
+═══════════════════════ */
+#fv{position:fixed;inset:0;z-index:5000;background:rgba(13,13,13,.98);display:none;flex-direction:column}
+#fv.open{display:flex}
+.fv-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;border-bottom:1px solid var(--border);
+}
+.fv-title{font-family:var(--font-en);font-size:22px;font-style:italic;color:var(--beige2)}
+.fv-title span{color:var(--red)}
+.fv-close{
+  background:none;border:1px solid var(--border);
+  color:var(--beige);font-family:var(--font-mono);font-size:9px;
+  letter-spacing:2px;padding:8px 20px;cursor:none;transition:all .3s;
+}
+.fv-close:hover{background:var(--red);color:var(--beige2);border-color:var(--red)}
+.fv-grid{
+  flex:1;overflow-y:auto;padding:28px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;
+}
+.fv-item{aspect-ratio:4/3;overflow:hidden;cursor:none;background:var(--surface2);position:relative}
+.fv-item img{width:100%;height:100%;object-fit:cover;transition:transform .45s;display:block}
+.fv-item:hover img{transform:scale(1.07)}
+.fv-item::after{
+  content:'🔍';
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:24px;background:rgba(192,57,43,.5);
+  opacity:0;transition:opacity .3s;
+}
+.fv-item:hover::after{opacity:1}
+.fv-empty{grid-column:1/-1;text-align:center;padding:80px;color:var(--muted);font-size:15px}
+
+/* ── Lightbox ── */
+#lb{position:fixed;inset:0;z-index:6000;background:rgba(0,0,0,.97);display:none;align-items:center;justify-content:center}
+#lb.open{display:flex}
+#lb img{max-width:90vw;max-height:90vh;object-fit:contain;display:block}
+#lb-x{position:absolute;top:20px;right:20px;background:none;border:1px solid var(--border);color:var(--beige);font-size:20px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .3s}
+#lb-x:hover{background:var(--red);border-color:var(--red)}
+
+/* ═══════════════════════
+   FOOTER
+═══════════════════════ */
+footer{
+  padding:70px 64px 36px;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;gap:28px;
+}
+.footer-logo{font-family:var(--font-en);font-size:28px;font-style:italic;color:var(--beige)}
+.footer-logo span{color:var(--red)}
+.fsocs{display:flex;gap:12px}
+.fsoc{
+  width:38px;height:38px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:14px;transition:all .3s;cursor:none;
+}
+.fsoc:hover{border-color:var(--red);background:var(--red)}
+.fnav{display:flex;gap:28px}
+.fnav a{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+  color:var(--muted);text-decoration:none;
+  transition:color .3s;cursor:none;text-transform:uppercase;
+}
+.fnav a:hover{color:var(--red)}
+/* red divider above footer */
+footer::before{content:'';display:block;width:60px;height:2px;background:var(--red);margin-bottom:4px}
+.fcr{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted)}
+
+/* ═══════════════════════
+   LOGIN MODAL
+═══════════════════════ */
+#lm{position:fixed;inset:0;z-index:7000;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center}
+#lm.open{display:flex}
+.lbox{background:var(--surface);border:1px solid var(--border);padding:48px;width:min(360px,calc(100vw - 32px));position:relative}
+.lbox::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red)}
+.ltitle{font-family:var(--font-en);font-size:24px;font-style:italic;color:var(--beige2);margin-bottom:28px;text-align:center}
+.lerr{background:rgba(192,57,43,.15);border:1px solid var(--border-red);color:var(--red2);font-size:12px;padding:9px 12px;margin-bottom:12px;display:none}
+.lx{position:absolute;top:14px;left:14px;background:none;border:none;color:var(--muted);font-size:18px;cursor:none;transition:color .3s}
+.lx:hover{color:var(--red)}
+.afrm label{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:5px;margin-top:13px}
+.afrm input,.afrm textarea,.afrm select{
+  width:100%;background:var(--bg);
+  border:1px solid var(--border);color:var(--beige);
+  padding:11px 14px;font-family:var(--font-ar);font-size:14px;
+  transition:border-color .3s;
+}
+.afrm input:focus,.afrm textarea:focus,.afrm select:focus{outline:none;border-color:var(--red)}
+.afrm textarea{min-height:88px;resize:vertical}
+
+/* ═══════════════════════
+   ADMIN PANEL
+═══════════════════════ */
+#ap{position:fixed;inset:0;z-index:8000;background:var(--bg);display:none;flex-direction:column;overflow-y:auto}
+#ap.open{display:flex}
+.atop{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10;
+}
+.atop::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--red),transparent)}
+.atitle{font-family:var(--font-en);font-size:18px;font-style:italic;color:var(--beige2)}
+.abody{padding:40px;display:flex;flex-direction:column;gap:44px}
+.astr{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:4px;
+  color:var(--red);text-transform:uppercase;
+  padding-bottom:11px;border-bottom:1px solid var(--border);margin-bottom:20px;
+}
+.abtn{
+  background:var(--red);color:var(--beige2);border:none;
+  padding:11px 26px;font-family:var(--font-mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;
+}
+.abtn:hover{background:var(--red2)}
+.abtn.g{background:#1a6b3a;color:var(--beige2)}.abtn.g:hover{background:#22874a}
+.abtn.r2{background:var(--surface2);color:var(--beige);border:1px solid var(--border)}.abtn.r2:hover{background:var(--surface)}
+.alist{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.aitem{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:13px 16px;display:flex;justify-content:space-between;align-items:center;
+}
+.aitem-n{font-size:13px;font-weight:600;color:var(--beige)}
+.adel{
+  background:none;border:1px solid var(--border-red);
+  color:var(--red2);font-family:var(--font-mono);font-size:8px;
+  letter-spacing:1px;padding:4px 10px;cursor:none;transition:all .3s;
+}
+.adel:hover{background:var(--red);color:var(--beige2);border-color:var(--red)}
+.ag2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.ag2{grid-template-columns:1fr}}
+
+/* ════════════════════════════════════════
+   RESPONSIVE SYSTEM
+   ─ Desktop    : > 1200px  (default)
+   ─ Laptop     : 1024px – 1199px
+   ─ Tablet     : 768px  – 1023px
+   ─ Mobile-L   : 480px  – 767px
+   ─ Mobile-S   : < 480px
+════════════════════════════════════════ */
+
+/* ── Laptop (1024–1199) ── */
+@media(max-width:1199px){
+  nav{padding:18px 40px}
+  section,#about-sec{padding:90px 40px}
+  footer{padding:60px 40px 32px}
+  #hero{padding:100px 40px}
+  .grad-layout{grid-template-columns:260px 1fr;gap:32px}
+  .about-inner{gap:56px}
+  .hero-stats{gap:44px}
+  .folders-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .certs-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+}
+
+/* ── Tablet (768–1023) ── */
+@media(max-width:1023px){
+  /* Nav — hide links, show hamburger */
+  nav{padding:16px 28px}
+  .nav-links{display:none}
+  #nav-hamburger{display:flex}
+
+  /* Sections */
+  section,#about-sec{padding:80px 28px}
+  footer{padding:56px 28px 28px}
+  #hero{padding:100px 28px 80px;min-height:100svh}
+
+  /* Hero */
+  .hero-stats{gap:32px}
+  .stn{font-size:34px}
+  .hero-chips{gap:8px}
+  .hero-chip{font-size:8px;padding:5px 12px}
+
+  /* Graduate — stack card on top */
+  .grad-layout{grid-template-columns:1fr;gap:28px}
+  .grad-id{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;padding:24px}
+  .grad-av,.grad-av-ph{margin-bottom:0}
+  .grad-sep{display:none}
+
+  /* About — stack */
+  .about-inner{grid-template-columns:1fr;gap:40px}
+  .about-pw{max-width:360px;margin:0 auto}
+  .about-frame{display:none}
+
+  /* Folders */
+  .folders-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px}
+
+  /* Certs */
+  .certs-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+
+  /* Admin */
+  .ag2{grid-template-columns:1fr}
+  .abody{padding:24px}
+  .atop{padding:16px 24px}
+}
+
+/* ── Mobile-L (480–767) ── */
+@media(max-width:767px){
+  /* hide custom cursor on touch */
+  #cur,#cur-ring{display:none}
+  body{cursor:auto}
+
+  nav{padding:14px 18px}
+  #lang-btn{top:14px;left:14px;font-size:9px;padding:6px 10px}
+  #admin-btn{bottom:20px;left:20px;width:38px;height:38px}
+  #admin-btn svg{width:14px}
+
+  section,#about-sec{padding:64px 18px}
+  footer{padding:48px 18px 24px;gap:20px}
+  #hero{padding:88px 18px 72px;min-height:100svh}
+
+  /* Hero */
+  .hero-tag{font-size:8px;letter-spacing:4px}
+  .hero-degree{font-size:12px}
+  .hero-stats{gap:22px;flex-wrap:wrap;justify-content:center}
+  .stn{font-size:30px}
+  .stl{font-size:8px}
+  .hero-chips{gap:6px}
+  .hero-chip{font-size:8px;padding:4px 10px}
+  .hero-scroll{display:none}
+
+  /* Section headers */
+  .stag{font-size:8px;letter-spacing:3px}
+
+  /* Folders — 2 cols */
+  .folders-grid{grid-template-columns:repeat(2,1fr);gap:2px}
+  .folder-thumb{height:160px}
+  .folder-name{font-size:13px}
+  .folder-meta{padding:12px 14px}
+
+  /* Graduate */
+  .grad-layout{gap:20px}
+  .grad-id{grid-template-columns:1fr;padding:20px}
+  .grad-av,.grad-av-ph{width:72px;height:72px;font-size:28px;margin-bottom:14px}
+  .grad-sep{display:block}
+  .proj-card{padding:18px 20px}
+  .proj-name{font-size:14px}
+
+  /* Certs — 1 col */
+  .certs-grid{grid-template-columns:1fr;gap:12px}
+  .cert-filter{gap:6px}
+  .cfbtn{font-size:8px;padding:5px 12px}
+
+  /* About */
+  .about-pw{max-width:280px}
+  .about-bio{font-size:14px}
+  .skills-wrap{gap:6px}
+  .skill-chip{font-size:8px;padding:4px 10px}
+
+  /* Folder viewer */
+  .fv-hd{padding:14px 18px}
+  .fv-title{font-size:16px}
+  .fv-grid{padding:12px;grid-template-columns:repeat(2,1fr);gap:2px}
+
+  /* Login box */
+  .lbox{width:calc(100vw - 32px);padding:32px 24px}
+
+  /* Admin */
+  .abody{padding:16px}
+  .atop{padding:14px 16px;flex-wrap:wrap;gap:10px}
+  .atop div{gap:8px}
+  .abtn{padding:9px 16px;font-size:8px}
+
+  /* Footer */
+  .fnav{flex-wrap:wrap;gap:16px;justify-content:center}
+  .fsocs{gap:10px}
+}
+
+/* ── Mobile-S (< 480px) ── */
+@media(max-width:479px){
+  section,#about-sec{padding:56px 14px}
+  footer{padding:40px 14px 20px}
+  #hero{padding:80px 14px 64px}
+  nav{padding:12px 14px}
+  #lang-btn{top:12px;left:12px;padding:5px 9px;font-size:8px;letter-spacing:1px}
+
+  /* Hero — single column tighter */
+  .hero-stats{gap:18px}
+  .stn{font-size:26px}
+  .hero-chips{display:none} /* too cramped */
+
+  /* Folders — 1 col on very small */
+  .folders-grid{grid-template-columns:1fr}
+  .folder-thumb{height:200px}
+
+  /* Certs */
+  .certs-grid{grid-template-columns:1fr}
+
+  /* Cert filter scroll */
+  .cert-filter{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .cert-filter::-webkit-scrollbar{height:2px}
+  .cert-filter::-webkit-scrollbar-thumb{background:var(--red)}
+
+  /* Folder viewer full screen */
+  .fv-grid{padding:8px;grid-template-columns:repeat(2,1fr)}
+
+  /* Project card */
+  .proj-top{flex-direction:column;gap:8px}
+  .proj-badge{align-self:flex-start}
+
+  /* About photo smaller */
+  .about-pw{max-width:220px}
+}
+
+/* ── Hamburger menu (shown on tablet/mobile) ── */
+#nav-hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+#nav-hamburger span{
+  display:block;width:22px;height:1.5px;
+  background:var(--beige);transition:all .3s;
+}
+#nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+#nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+#nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Mobile nav drawer */
+#mobile-nav{
+  position:fixed;inset:0;z-index:850;
+  background:rgba(13,13,13,.98);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:36px;
+  opacity:0;visibility:hidden;
+  transition:opacity .4s,visibility .4s;
+}
+#mobile-nav.open{opacity:1;visibility:visible}
+#mobile-nav a{
+  font-family:var(--font-en);font-size:clamp(26px,6vw,40px);
+  font-style:italic;color:var(--beige);text-decoration:none;
+  transition:color .3s;letter-spacing:1px;
+}
+#mobile-nav a:hover,#mobile-nav a:active{color:var(--red)}
+#mobile-nav .mob-tag{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:4px;
+  color:var(--red);text-transform:uppercase;margin-bottom:-20px;
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="ld-logo">Port<span>folio</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+  <div class="ld-txt">Loading Experience</div>
+</div>
+
+<!-- Fixed UI -->
+<button id="lang-btn" onclick="toggleLang()">EN / AR</button>
+<div id="admin-btn" onclick="openLogin()" title="Admin">
+  <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo" id="nav-name">Port<span>folio</span></div>
+  <ul class="nav-links">
+    <li><a href="#photography" data-ar="التصوير" data-en="Photography">التصوير</a></li>
+    <li><a href="#graduate" data-ar="خريج جامعي" data-en="Graduate">خريج جامعي</a></li>
+    <li><a href="#certificates" data-ar="الشهادات" data-en="Certificates">الشهادات</a></li>
+    <li><a href="#about-sec" data-ar="عني" data-en="About">عني</a></li>
+  </ul>
+  <button id="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Nav Drawer -->
+<div id="mobile-nav">
+  <div class="mob-tag" data-ar="القائمة" data-en="Menu">القائمة</div>
+  <a href="#photography" onclick="closeMobileNav()" data-ar="التصوير" data-en="Photography">التصوير</a>
+  <a href="#graduate" onclick="closeMobileNav()" data-ar="خريج جامعي" data-en="Graduate">خريج جامعي</a>
+  <a href="#certificates" onclick="closeMobileNav()" data-ar="الشهادات" data-en="Certificates">الشهادات</a>
+  <a href="#about-sec" onclick="closeMobileNav()" data-ar="عني" data-en="About">عني</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-tag" id="hero-tag">مصور · خريج نظم معلومات إدارية</div>
+  <h1 class="hero-name" id="hero-name">Visual<br><span>Portfolio</span></h1>
+  <p class="hero-degree" id="hero-degree">بكالوريس نظم معلومات إدارية · مصور فوتوغرافي</p>
+  <div class="hero-chips">
+    <span class="hero-chip" data-ar="تصوير فوتوغرافي" data-en="Photography">تصوير فوتوغرافي</span>
+    <span class="hero-chip" data-ar="نظم معلومات" data-en="Info Systems">نظم معلومات</span>
+    <span class="hero-chip" data-ar="تحليل بيانات" data-en="Data Analysis">تحليل بيانات</span>
+  </div>
+  <div class="hero-stats">
+    <div class="stt"><div class="stn" id="sph">0</div><div class="stl" data-ar="ألبوم" data-en="Albums">ألبوم</div></div>
+    <div class="stt"><div class="stn" id="spr">0</div><div class="stl" data-ar="مشروع" data-en="Projects">مشروع</div></div>
+    <div class="stt"><div class="stn" id="sct">0</div><div class="stl" data-ar="شهادة" data-en="Certs">شهادة</div></div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('photography').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- ═══ 01 PHOTOGRAPHY ═══ -->
+<section id="photography">
+  <div class="reveal">
+    <div class="stag" data-ar="01 — التصوير الفوتوغرافي" data-en="01 — Photography">01 — التصوير الفوتوغرافي</div>
+    <h2 class="stitle" id="ptitle">التصوير الفوتوغرافي</h2>
+    <p class="sdesc" id="pdesc">مجموعة ألبوماتي الفوتوغرافية — اضغط على أي ألبوم لتستعرض الصور.</p>
+  </div>
+  <div class="folders-grid reveal" id="folders-grid"></div>
+</section>
+
+<!-- ═══ 02 GRADUATE ═══ -->
+<section id="graduate">
+  <div class="reveal">
+    <div class="stag" data-ar="02 — خريج جامعي" data-en="02 — Graduate">02 — خريج جامعي</div>
+    <h2 class="stitle" id="gtitle">خريج بكالوريس — نظم معلومات إدارية</h2>
+    <p class="sdesc" id="gdesc">مشاريع ومهام التدريب الجامعي — كل مشروع يعكس مهارة حقيقية اكتسبتها.</p>
+  </div>
+  <div class="grad-layout reveal">
+    <div class="grad-id">
+      <div id="grad-av-wrap"><div class="grad-av-ph">🎓</div></div>
+      <div class="grad-n" id="gc-name">اسمك هنا</div>
+      <div class="grad-t" id="gc-title">MIS Graduate · Visual Creator</div>
+      <div class="grad-sep"></div>
+      <div class="grad-rows" id="gc-rows">
+        <div class="grad-row"><span class="grad-ico">🎓</span><div class="grad-info"><strong>التخصص</strong>نظم المعلومات الإدارية</div></div>
+        <div class="grad-row"><span class="grad-ico">🏛️</span><div class="grad-info"><strong>الجامعة</strong>اسم الجامعة</div></div>
+        <div class="grad-row"><span class="grad-ico">📅</span><div class="grad-info"><strong>سنة التخرج</strong>2025</div></div>
+        <div class="grad-row"><span class="grad-ico">📍</span><div class="grad-info"><strong>الموقع</strong>المملكة العربية السعودية</div></div>
+      </div>
+    </div>
+    <div class="proj-list" id="proj-list"></div>
+  </div>
+</section>
+
+<!-- ═══ 03 CERTIFICATES ═══ -->
+<section id="certificates">
+  <div class="reveal">
+    <div class="stag" data-ar="03 — الشهادات والكورسات" data-en="03 — Certificates">03 — الشهادات والكورسات</div>
+    <h2 class="stitle" id="ctitle">الشهادات والكورسات</h2>
+    <p class="sdesc" id="cdesc">شهادات وكورسات أكملتها لتطوير مهاراتي المهنية والتقنية.</p>
+  </div>
+  <div class="cert-filter reveal" id="cert-filter"></div>
+  <div class="certs-grid reveal" id="certs-grid"></div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<div id="about-sec">
+  <div class="about-inner reveal">
+    <div class="about-pw">
+      <div id="about-photo-el" class="about-ph">📸</div>
+      <div class="about-frame"></div>
+    </div>
+    <div>
+      <div class="stag" data-ar="عني" data-en="About Me">عني</div>
+      <h2 class="stitle" id="about-name-el">اسمك هنا</h2>
+      <p class="about-bio" id="about-bio-el">مصور فوتوغرافي وخريج نظم معلومات إدارية، أجمع بين العالم التقني والإبداع البصري.</p>
+      <div class="skills-wrap" id="skills-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo" id="footer-name">Port<span>folio</span></div>
+  <div class="fsocs">
+    <a class="fsoc" id="fsoc-ig" href="#" target="_blank">📷</a>
+    <a class="fsoc" id="fsoc-tw" href="#" target="_blank">🐦</a>
+    <a class="fsoc" id="fsoc-li" href="#" target="_blank">💼</a>
+  </div>
+  <nav class="fnav">
+    <a href="#photography" data-ar="التصوير" data-en="Photography">التصوير</a>
+    <a href="#graduate" data-ar="خريج جامعي" data-en="Graduate">خريج جامعي</a>
+    <a href="#certificates" data-ar="الشهادات" data-en="Certificates">الشهادات</a>
+  </nav>
+  <div class="fcr" id="fcr">© 2025 Portfolio. All rights reserved.</div>
+</footer>
+
+<!-- Folder Viewer -->
+<div id="fv">
+  <div class="fv-hd">
+    <div class="fv-title" id="fv-title">Album</div>
+    <button class="fv-close" onclick="closeFV()">✕ CLOSE</button>
+  </div>
+  <div class="fv-grid" id="fv-grid"></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lb" onclick="closeLB()">
+  <button id="lb-x">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- Login -->
+<div id="lm">
+  <div class="lbox">
+    <button class="lx" onclick="closeLM()">✕</button>
+    <div class="ltitle">Admin Access</div>
+    <div class="lerr" id="lerr">كلمة السر غلط ❌</div>
+    <div class="afrm">
+      <label>Password / كلمة السر</label>
+      <input type="password" id="lpass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <br><br>
+      <button class="abtn" onclick="doLogin()" style="width:100%;text-align:center;padding:13px">دخول / Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="ap">
+  <div class="atop">
+    <div class="atitle">⚙ Admin Dashboard</div>
+    <div style="display:flex;gap:10px">
+      <button class="abtn g" onclick="saveAll()">💾 حفظ الكل</button>
+      <button class="abtn r2" onclick="closeAdmin()">✕ خروج</button>
+    </div>
+  </div>
+  <div class="abody">
+
+    <!-- Profile -->
+    <div>
+      <div class="astr">👤 الملف الشخصي / Profile</div>
+      <div class="ag2 afrm">
+        <div>
+          <label>الاسم الكامل</label><input type="text" id="ap-name">
+          <label>العنوان (EN)</label><input type="text" id="ap-title" placeholder="MIS Graduate · Visual Creator">
+          <label>الجامعة</label><input type="text" id="ap-uni">
+          <label>سنة التخرج</label><input type="text" id="ap-year" placeholder="2025">
+          <label>الموقع</label><input type="text" id="ap-loc" placeholder="المملكة العربية السعودية">
+          <label>نبذة شخصية</label><textarea id="ap-bio"></textarea>
+          <label>مهاراتك (مفصولة بفاصلة)</label>
+          <input type="text" id="ap-skills" placeholder="تصوير, Excel, SQL, إدارة مشاريع">
+        </div>
+        <div>
+          <label>صورة شخصية (URL أو ارفع)</label>
+          <input type="text" id="ap-photo" placeholder="https://...">
+          <input type="file" id="ap-photo-f" accept="image/*" onchange="f2i(this,'ap-photo')" style="font-size:11px;color:var(--muted);margin-top:4px">
+          <label>Hero Tag (AR)</label>
+          <input type="text" id="ap-htag" placeholder="مصور · خريج نظم معلومات إدارية">
+          <label>Instagram URL</label><input type="text" id="ap-ig">
+          <label>Twitter URL</label><input type="text" id="ap-tw">
+          <label>LinkedIn URL</label><input type="text" id="ap-li">
+        </div>
+      </div>
+    </div>
+
+    <!-- Photography -->
+    <div>
+      <div class="astr">📁 مجلدات التصوير / Photography Folders</div>
+      <div class="afrm">
+        <div class="ag2">
+          <div><label>اسم المجلد (AR)</label><input type="text" id="af-ar" placeholder="تصوير ركاز"></div>
+          <div><label>اسم المجلد (EN)</label><input type="text" id="af-en" placeholder="Rikaz Photography"></div>
+        </div>
+        <label>إيموجي</label><input type="text" id="af-emoji" placeholder="📷" style="width:70px">
+        <label>صورة الغلاف (URL أو ارفع)</label>
+        <input type="text" id="af-cover" placeholder="https://...">
+        <input type="file" id="af-cover-f" accept="image/*" onchange="f2i(this,'af-cover')" style="font-size:11px;color:var(--muted);margin-top:4px">
+        <button class="abtn" onclick="addFolder()" style="margin-top:10px">+ إضافة مجلد</button>
+      </div>
+      <div class="alist" id="al-folders"></div>
+      <br>
+      <div class="astr" style="margin-top:0">🖼 إضافة صور لمجلد</div>
+      <div class="afrm">
+        <label>اختر المجلد</label><select id="af-sel"></select>
+        <label>URLs مفصولة بفاصلة</label>
+        <input type="text" id="af-imgs" placeholder="https://img1.jpg, https://img2.jpg">
+        <label>أو ارفع صور</label>
+        <input type="file" id="af-imgs-f" accept="image/*" multiple onchange="mf2i(this,'af-imgs')" style="font-size:11px;color:var(--muted)">
+        <button class="abtn" onclick="addFolderImgs()" style="margin-top:10px">+ أضف الصور</button>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div>
+      <div class="astr">🎓 مشاريع جامعية / Projects</div>
+      <div class="afrm">
+        <div class="ag2">
+          <div><label>اسم المشروع (AR)</label><input type="text" id="aw-ar" placeholder="موقع رسمي"></div>
+          <div><label>اسم المشروع (EN)</label><input type="text" id="aw-en" placeholder="Official Website"></div>
+        </div>
+        <label>وصف مختصر</label><textarea id="aw-desc" placeholder="ماذا قمت في هذا المشروع؟"></textarea>
+        <label>نوع المشروع</label>
+        <select id="aw-type">
+          <option value="Website">موقع / Website</option>
+          <option value="Excel">إكسل / Excel</option>
+          <option value="PowerPoint">بوربوينت / PowerPoint</option>
+          <option value="Database">قاعدة بيانات / Database</option>
+          <option value="Report">تقرير / Report</option>
+          <option value="Design">تصميم / Design</option>
+          <option value="App">تطبيق / App</option>
+          <option value="Other">أخرى</option>
+        </select>
+        <label>تاقات (مفصولة بفاصلة)</label>
+        <input type="text" id="aw-tags" placeholder="HTML, CSS, Excel">
+        <label>صور المشروع (URLs أو ارفع)</label>
+        <input type="text" id="aw-imgs" placeholder="https://img1.jpg">
+        <input type="file" id="aw-imgs-f" accept="image/*" multiple onchange="mf2i(this,'aw-imgs')" style="font-size:11px;color:var(--muted);margin-top:4px">
+        <button class="abtn" onclick="addProject()" style="margin-top:10px">+ إضافة مشروع</button>
+      </div>
+      <div class="alist" id="al-projects"></div>
+    </div>
+
+    <!-- Certificates -->
+    <div>
+      <div class="astr">🏅 الشهادات / Certificates</div>
+      <div class="afrm">
+        <div class="ag2">
+          <div><label>اسم الشهادة (AR)</label><input type="text" id="ac-ar" placeholder="شهادة تصوير"></div>
+          <div><label>اسم الشهادة (EN)</label><input type="text" id="ac-en" placeholder="Photography Cert"></div>
+        </div>
+        <label>الجهة المانحة</label><input type="text" id="ac-issuer" placeholder="Coursera / Google / Adobe">
+        <label>التاريخ</label><input type="text" id="ac-date" placeholder="2024">
+        <label>الفئة (للفلترة)</label><input type="text" id="ac-cat" placeholder="تصوير / تقنية / إدارة">
+        <label>إيموجي</label><input type="text" id="ac-emoji" placeholder="🎓" style="width:70px">
+        <label>صورة الشهادة (URL أو ارفع)</label>
+        <input type="text" id="ac-img" placeholder="https://...">
+        <input type="file" id="ac-img-f" accept="image/*" onchange="f2i(this,'ac-img')" style="font-size:11px;color:var(--muted);margin-top:4px">
+        <button class="abtn" onclick="addCert()" style="margin-top:10px">+ إضافة شهادة</button>
+      </div>
+      <div class="alist" id="al-certs"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ───────── DATA ─────────
+const PASS='14242003';
+let data={
+  profile:{
+    name:'اسمك هنا',titleEn:'MIS Graduate · Visual Creator',
+    uni:'اسم الجامعة',year:'2025',loc:'المملكة العربية السعودية',
+    bio:'مصور فوتوغرافي وخريج نظم معلومات إدارية، أجمع بين العالم التقني والإبداع البصري.',
+    photo:'',ig:'#',tw:'#',li:'#',
+    skills:['تصوير','Excel','PowerPoint','SQL','إدارة مشاريع','نظم معلومات'],
+    htag:'مصور · خريج نظم معلومات إدارية'
+  },
+  folders:[
+    {id:1,ar:'تصوير ركاز',en:'Rikaz Photography',emoji:'⛏️',cover:'',images:[]},
+    {id:2,ar:'تصوير إيفنت',en:'Event Photography',emoji:'🎪',cover:'',images:[]},
+    {id:3,ar:'بورتريه',en:'Portrait',emoji:'🤍',cover:'',images:[]},
+  ],
+  projects:[
+    {id:1,ar:'موقع رسمي',en:'Official Website',desc:'بناء موقع رسمي متكامل خلال فترة التدريب',type:'Website',tags:['HTML','CSS','JS'],images:[]},
+    {id:2,ar:'تقرير Excel تحليلي',en:'Excel Report',desc:'شيت إكسل لتحليل البيانات وعرضها',type:'Excel',tags:['Excel','Data'],images:[]},
+    {id:3,ar:'عرض بوربوينت',en:'PowerPoint',desc:'عرض تقديمي لمشروع التخرج',type:'PowerPoint',tags:['PowerPoint'],images:[]},
+  ],
+  certs:[
+    {id:1,ar:'تصوير احترافي',en:'Professional Photography',issuer:'Coursera',date:'2024',cat:'تصوير',emoji:'📷',img:''},
+    {id:2,ar:'Excel المتقدم',en:'Advanced Excel',issuer:'Microsoft',date:'2024',cat:'تقنية',emoji:'📊',img:''},
+    {id:3,ar:'أساسيات قواعد البيانات',en:'Database Fundamentals',issuer:'Oracle',date:'2023',cat:'تقنية',emoji:'🗄️',img:''},
+  ]
+};
+function ld(){const s=localStorage.getItem('pf3');if(s)try{data=JSON.parse(s)}catch(e){}}
+function sd(){localStorage.setItem('pf3',JSON.stringify(data))}
+ld();
+
+// ───────── LANGUAGE ─────────
+let lang=localStorage.getItem('pf_lang')||'ar';
+function toggleLang(){lang=lang==='ar'?'en':'ar';localStorage.setItem('pf_lang',lang);applyLang();renderAll();}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-ar][data-en]').forEach(el=>el.textContent=lang==='ar'?el.dataset.ar:el.dataset.en);
+}
+
+// ───────── CURSOR ─────────
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;curEl.style.left=mx+'px';curEl.style.top=my+'px'});
+(function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(a)})();
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.folder-card,.proj-card,.cert-card,.fv-item,.skill-chip'))document.body.classList.add('cur-big')});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.folder-card,.proj-card,.cert-card,.fv-item,.skill-chip'))document.body.classList.remove('cur-big')});
+
+// ───────── LOADER ─────────
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('loader').classList.add('hidden');revealSetup();countStats();},1800);
+});
+
+// ───────── REVEAL ─────────
+function revealSetup(){
+  const io=new IntersectionObserver(en=>{en.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*80);io.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}
+
+// ───────── STATS ─────────
+function countStats(){cnt('sph',data.folders.length);cnt('spr',data.projects.length);cnt('sct',data.certs.length);}
+function cnt(id,target){const el=document.getElementById(id);let c=0,s=Math.max(1,Math.ceil(target/35));const t=setInterval(()=>{c=Math.min(c+s,target);el.textContent=c;if(c>=target)clearInterval(t)},45);}
+
+// ───────── RENDER ALL ─────────
+function renderAll(){renderProfile();renderFolders();renderProjects();renderCerts();}
+
+function renderProfile(){
+  const p=data.profile;
+  document.getElementById('hero-tag').textContent=p.htag;
+  document.getElementById('hero-degree').textContent=
+    lang==='ar'?`بكالوريس نظم معلومات إدارية · ${p.uni} · ${p.year}`
+               :`BSc Management Information Systems · ${p.uni} · ${p.year}`;
+  // nav/footer logo
+  ['nav-name','footer-name'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){const nm=p.name||'Portfolio';el.innerHTML=nm.slice(0,Math.ceil(nm.length/2))+'<span>'+nm.slice(Math.ceil(nm.length/2))+'</span>'}
+  });
+  document.getElementById('fcr').textContent=`© ${new Date().getFullYear()} ${p.name}. All rights reserved.`;
+  document.getElementById('gc-name').textContent=p.name;
+  document.getElementById('gc-title').textContent=p.titleEn;
+  document.getElementById('gc-rows').innerHTML=`
+    <div class="grad-row"><span class="grad-ico">🎓</span><div class="grad-info"><strong>${lang==='ar'?'التخصص':'Major'}</strong>${lang==='ar'?'نظم المعلومات الإدارية':'Management Information Systems'}</div></div>
+    <div class="grad-row"><span class="grad-ico">🏛️</span><div class="grad-info"><strong>${lang==='ar'?'الجامعة':'University'}</strong>${p.uni}</div></div>
+    <div class="grad-row"><span class="grad-ico">📅</span><div class="grad-info"><strong>${lang==='ar'?'سنة التخرج':'Graduated'}</strong>${p.year}</div></div>
+    <div class="grad-row"><span class="grad-ico">📍</span><div class="grad-info"><strong>${lang==='ar'?'الموقع':'Location'}</strong>${p.loc}</div></div>
+  `;
+  document.getElementById('grad-av-wrap').innerHTML=p.photo
+    ?`<img class="grad-av" src="${p.photo}" alt="">`
+    :`<div class="grad-av-ph">🎓</div>`;
+  document.getElementById('about-name-el').textContent=p.name;
+  document.getElementById('about-bio-el').textContent=p.bio;
+  document.getElementById('skills-wrap').innerHTML=(p.skills||[]).map(s=>`<span class="skill-chip">${s}</span>`).join('');
+  const ap=document.getElementById('about-photo-el');
+  if(ap && p.photo){
+    const img=document.createElement('img');img.id='about-photo-el';img.className='about-photo';img.src=p.photo;ap.replaceWith(img);
+  }
+  document.getElementById('fsoc-ig').href=p.ig||'#';
+  document.getElementById('fsoc-tw').href=p.tw||'#';
+  document.getElementById('fsoc-li').href=p.li||'#';
+}
+
+function renderFolders(){
+  document.getElementById('folders-grid').innerHTML=data.folders.map(f=>`
+    <div class="folder-card" onclick="openFolder(${f.id})">
+      <div class="folder-thumb">
+        ${f.cover?`<img src="${f.cover}" alt="">`:`<div class="folder-ph">${f.emoji||'📁'}</div>`}
+        <div class="folder-overlay">
+          <span class="folder-open-lbl">${lang==='ar'?'فتح الألبوم ←':'Open Album →'}</span>
+        </div>
+      </div>
+      <div class="folder-meta">
+        <div><div class="folder-name">${lang==='ar'?f.ar:f.en}</div><div class="folder-count">${f.images.length} ${lang==='ar'?'صورة':'photos'}</div></div>
+        <span style="font-size:20px">${f.emoji||'📁'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+const tE={Website:'🌐',Excel:'📊',PowerPoint:'📊',Database:'🗄️',Report:'📄',Design:'🎨',App:'📱',Other:'💼'};
+function renderProjects(){
+  document.getElementById('proj-list').innerHTML=data.projects.map(w=>`
+    <div class="proj-card">
+      <div class="proj-top">
+        <div class="proj-name">${lang==='ar'?w.ar:w.en}</div>
+        <div class="proj-badge">${tE[w.type]||'💼'} ${w.type}</div>
+      </div>
+      <div class="proj-desc">${w.desc||''}</div>
+      <div class="proj-tags">${(w.tags||[]).map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>
+      ${w.images.length?`<div class="proj-imgs">${w.images.slice(0,4).map(i=>`<img class="proj-img" src="${i}" onclick="openLB('${i}');event.stopPropagation();">`).join('')}</div>`:''}
+    </div>
+  `).join('');
+}
+
+let certCat='all';
+function filterCerts(cat,btn){
+  certCat=cat;
+  document.querySelectorAll('.cfbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCertsGrid();
+}
+function renderCerts(){
+  const cats=[...new Set(data.certs.map(c=>c.cat).filter(Boolean))];
+  document.getElementById('cert-filter').innerHTML=
+    `<button class="cfbtn ${certCat==='all'?'active':''}" onclick="filterCerts('all',this)">${lang==='ar'?'الكل':'All'}</button>`
+    +cats.map(c=>`<button class="cfbtn ${certCat===c?'active':''}" onclick="filterCerts('${c}',this)">${c}</button>`).join('');
+  renderCertsGrid();
+}
+function renderCertsGrid(){
+  const list=certCat==='all'?data.certs:data.certs.filter(c=>c.cat===certCat);
+  document.getElementById('certs-grid').innerHTML=list.map(c=>`
+    <div class="cert-card">
+      <div class="cert-gl"></div>
+      ${c.cat?`<div class="cert-cat-tag">${c.cat}</div>`:''}
+      <span class="cert-emoji">${c.emoji||'🎓'}</span>
+      <div class="cert-name">${lang==='ar'?c.ar:c.en}</div>
+      <div class="cert-issuer">${c.issuer||''}</div>
+      <div class="cert-date">${c.date||''}</div>
+      ${c.img?`<img class="cert-img" src="${c.img}" onclick="openLB('${c.img}')">`:''}
+    </div>
+  `).join('');
+}
+
+// ───────── FOLDER VIEWER ─────────
+function openFolder(id){
+  const f=data.folders.find(x=>x.id===id);if(!f)return;
+  document.getElementById('fv-title').innerHTML=`<span>${lang==='ar'?f.ar:f.en}</span>`;
+  document.getElementById('fv-grid').innerHTML=f.images.length
+    ?f.images.map(img=>`<div class="fv-item" onclick="openLB('${img}')"><img src="${img}" alt=""></div>`).join('')
+    :`<div class="fv-empty">${lang==='ar'?'لا توجد صور بعد 📷':'No photos yet 📷'}</div>`;
+  document.getElementById('fv').classList.add('open');document.body.style.overflow='hidden';
+}
+function closeFV(){document.getElementById('fv').classList.remove('open');document.body.style.overflow='';}
+
+// ───────── LIGHTBOX ─────────
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('open')}
+function closeLB(){document.getElementById('lb').classList.remove('open')}
+
+// ───────── LOGIN ─────────
+function openLogin(){document.getElementById('lm').classList.add('open');setTimeout(()=>document.getElementById('lpass').focus(),80)}
+function closeLM(){document.getElementById('lm').classList.remove('open');document.getElementById('lpass').value='';document.getElementById('lerr').style.display='none'}
+function doLogin(){
+  if(document.getElementById('lpass').value===PASS){closeLM();openAdmin();}
+  else{document.getElementById('lerr').style.display='block';document.getElementById('lpass').value='';}
+}
+
+// ───────── ADMIN ─────────
+function openAdmin(){fillAdmin();document.getElementById('ap').classList.add('open');document.body.style.overflow='hidden'}
+function closeAdmin(){document.getElementById('ap').classList.remove('open');document.body.style.overflow=''}
+
+function fillAdmin(){
+  const p=data.profile;
+  g2('ap-name',p.name);g2('ap-title',p.titleEn);g2('ap-uni',p.uni);g2('ap-year',p.year);
+  g2('ap-loc',p.loc);g2('ap-bio',p.bio);g2('ap-photo',p.photo);
+  g2('ap-ig',p.ig);g2('ap-tw',p.tw);g2('ap-li',p.li);
+  g2('ap-skills',(p.skills||[]).join(', '));g2('ap-htag',p.htag);
+  renderAdminLists();
+}
+function g2(id,val){document.getElementById(id).value=val||''}
+function saveAll(){
+  const p=data.profile;
+  p.name=gv('ap-name');p.titleEn=gv('ap-title');p.uni=gv('ap-uni');p.year=gv('ap-year');
+  p.loc=gv('ap-loc');p.bio=gv('ap-bio');p.photo=gv('ap-photo');
+  p.ig=gv('ap-ig')||'#';p.tw=gv('ap-tw')||'#';p.li=gv('ap-li')||'#';
+  p.skills=gv('ap-skills').split(',').map(s=>s.trim()).filter(Boolean);
+  p.htag=gv('ap-htag');
+  sd();renderAll();countStats();toast('✅ تم الحفظ!');
+}
+function gv(id){return document.getElementById(id).value.trim()}
+
+function renderAdminLists(){
+  document.getElementById('al-folders').innerHTML=data.folders.map(f=>`
+    <div class="aitem"><div class="aitem-n">${f.ar} / ${f.en} <span style="color:var(--muted);font-size:10px">(${f.images.length} صورة)</span></div>
+    <button class="adel" onclick="delFolder(${f.id})">حذف</button></div>`).join('');
+  document.getElementById('al-projects').innerHTML=data.projects.map(w=>`
+    <div class="aitem"><div class="aitem-n">${w.ar} <span style="color:var(--red);font-size:9px">${w.type}</span></div>
+    <button class="adel" onclick="delProject(${w.id})">حذف</button></div>`).join('');
+  document.getElementById('al-certs').innerHTML=data.certs.map(c=>`
+    <div class="aitem"><div class="aitem-n">${c.emoji} ${c.ar}</div>
+    <button class="adel" onclick="delCert(${c.id})">حذف</button></div>`).join('');
+  document.getElementById('af-sel').innerHTML=data.folders.map(f=>`<option value="${f.id}">${f.ar}</option>`).join('');
+}
+
+function addFolder(){
+  const ar=gv('af-ar');if(!ar)return alert('ضع اسم المجلد!');
+  data.folders.push({id:Date.now(),ar,en:gv('af-en')||ar,emoji:gv('af-emoji')||'📁',cover:gv('af-cover'),images:[]});
+  ['af-ar','af-en','af-cover'].forEach(i=>document.getElementById(i).value='');
+  sd();renderFolders();renderAdminLists();toast('✅ تم إضافة المجلد!');
+}
+function delFolder(id){if(!confirm('حذف المجلد؟'))return;data.folders=data.folders.filter(f=>f.id!==id);sd();renderFolders();renderAdminLists();toast('🗑 تم الحذف');}
+function addFolderImgs(){
+  const fid=parseInt(document.getElementById('af-sel').value);
+  const f=data.folders.find(x=>x.id===fid);if(!f)return;
+  const imgs=gv('af-imgs').split(',').map(s=>s.trim()).filter(Boolean);
+  f.images.push(...imgs);document.getElementById('af-imgs').value='';
+  sd();renderFolders();renderAdminLists();countStats();toast(`✅ أُضيفت ${imgs.length} صورة!`);
+}
+function addProject(){
+  const ar=gv('aw-ar');if(!ar)return alert('ضع اسم المشروع!');
+  const imgs=gv('aw-imgs').split(',').map(s=>s.trim()).filter(Boolean);
+  const tags=gv('aw-tags').split(',').map(s=>s.trim()).filter(Boolean);
+  data.projects.push({id:Date.now(),ar,en:gv('aw-en')||ar,desc:gv('aw-desc'),type:document.getElementById('aw-type').value,tags,images:imgs});
+  ['aw-ar','aw-en','aw-desc','aw-tags','aw-imgs'].forEach(i=>document.getElementById(i).value='');
+  sd();renderProjects();renderAdminLists();countStats();toast('✅ تم إضافة المشروع!');
+}
+function delProject(id){if(!confirm('حذف؟'))return;data.projects=data.projects.filter(w=>w.id!==id);sd();renderProjects();renderAdminLists();countStats();toast('🗑 تم الحذف');}
+function addCert(){
+  const ar=gv('ac-ar');if(!ar)return alert('ضع اسم الشهادة!');
+  data.certs.push({id:Date.now(),ar,en:gv('ac-en')||ar,issuer:gv('ac-issuer'),date:gv('ac-date'),cat:gv('ac-cat'),emoji:gv('ac-emoji')||'🎓',img:gv('ac-img')});
+  ['ac-ar','ac-en','ac-issuer','ac-date','ac-cat','ac-img'].forEach(i=>document.getElementById(i).value='');
+  sd();renderCerts();renderAdminLists();countStats();toast('✅ تم إضافة الشهادة!');
+}
+function delCert(id){if(!confirm('حذف؟'))return;data.certs=data.certs.filter(c=>c.id!==id);sd();renderCerts();renderAdminLists();countStats();toast('🗑 تم الحذف');}
+
+function f2i(inp,tid){const r=new FileReader();r.onload=e=>document.getElementById(tid).value=e.target.result;r.readAsDataURL(inp.files[0])}
+function mf2i(inp,tid){
+  Promise.all(Array.from(inp.files).map(f=>new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f)}))).then(res=>{
+    const ex=document.getElementById(tid).value;
+    document.getElementById(tid).value=[...(ex?ex.split(',').map(s=>s.trim()).filter(Boolean):[]),...res].join(', ');
+  });
+}
+
+function toast(msg){
+  const t=document.createElement('div');t.textContent=msg;
+  Object.assign(t.style,{
+    position:'fixed',bottom:'68px',left:'50%',transform:'translateX(-50%)',
+    background:'var(--red)',color:'var(--beige2)',
+    fontFamily:'var(--font-mono)',fontSize:'10px',letterSpacing:'1px',
+    padding:'10px 22px',zIndex:'9000',transition:'opacity .5s',opacity:'1',whiteSpace:'nowrap',
+  });
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),500)},2400);
+}
+
+// ───────── MOBILE NAV ─────────
+function toggleMobileNav(){
+  const mn=document.getElementById('mobile-nav');
+  const hb=document.getElementById('nav-hamburger');
+  mn.classList.toggle('open');
+  hb.classList.toggle('open');
+  document.body.style.overflow=mn.classList.contains('open')?'hidden':'';
+}
+function closeMobileNav(){
+  document.getElementById('mobile-nav').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.body.style.overflow='';
+}
+// close mobile nav on resize to desktop
+window.addEventListener('resize',()=>{if(window.innerWidth>1023)closeMobileNav();});
+
+// ───────── INIT ─────────
+applyLang();
+renderAll();
+revealSetup();
+</script>
+</body>
+</html>
